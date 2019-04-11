@@ -9,14 +9,8 @@ var lunar = {
 }
 
 function getLunarDate(date) {
-
   var year, month, day;
-  if (!date) {
-      date = new Date(), year = date.getFullYear(), month = date.getMonth(), day = date.getDate();
-  } else {
       date = date.split('-'), year = parseInt(date[0]), month = date[1] - 1, day = parseInt(date[2]);
-  }
-
   if (year < 1921 || year > 2020) {
       return {}
   }
@@ -64,6 +58,7 @@ function getLunarDate(date) {
 
 
 function getLunarDateString(lunarDate) {
+    // console.log(lunarDate,'lunarDate')
   if (!lunarDate.lunarDay) return;
   var data = {},
       lunarYear = lunarDate.lunarYear,
@@ -72,14 +67,13 @@ function getLunarDateString(lunarDate) {
 
   data.tg = lunar.tg.charAt((lunarYear - 4) % 10);
   data.dz = lunar.dz.charAt((lunarYear - 4) % 12);
-  data.year = lunar.year.charAt((lunarYear - 4) % 12);
-  data.month = lunarMonth < 1 ? '(闰)' + lunar.month.charAt(-lunarMonth - 1) : lunar.month.charAt(lunarMonth - 1);
+  data.year_lunar = lunar.year.charAt((lunarYear - 4) % 12);
+  data.month_lunar = lunarMonth < 1 ? '(闰)' + lunar.month.charAt(-lunarMonth - 1) : lunar.month.charAt(lunarMonth - 1);
 
-  data.day = (lunarDay < 11) ? "初" : ((lunarDay < 20) ? "十" : ((lunarDay < 30) ? "廿" : "三十"));
+  data.day_lunar = (lunarDay < 11) ? "初" : ((lunarDay < 20) ? "十" : ((lunarDay < 30) ? "廿" : "三十"));
   if (lunarDay % 10 != 0 || lunarDay == 10) {
-      data.day += lunar.number.charAt((lunarDay - 1) % 10);
+      data.day_lunar += lunar.number.charAt((lunarDay - 1) % 10);
   }
-
   return data;
 }
 
@@ -89,7 +83,7 @@ function getLunarDateString(lunarDate) {
 // alert(JSON.stringify(lunarDateString));
 
 function getLunarDateFun(params){
-  return  JSON.stringify(getLunarDateString(getLunarDate(params))) 
+  return  getLunarDateString(getLunarDate(params)) 
 }
 
 // alert(getLunarDateFun('2019-4-11'))

@@ -24,7 +24,7 @@
           @click="onPressDate(item)"
         >
           <div :class="item.clickactive?'day-active':''">
-            <span :style="item.day<1?'display:none':''">{{item.day}}</span>
+            <span :style="item.day<1?'display:none':''">{{item.day}}{{item.day_lunar}}</span>
           </div>
         </div>
       </div>
@@ -146,8 +146,6 @@ export default {
     };
   },
   mounted() {
-    // console.log(getLunarDateFun('2019-4-11'),'getLunarDateFun')
-    // alert(getLunarDateFun("2019-4-11"));
     this.createDateListData();
   },
   methods: {
@@ -175,21 +173,22 @@ export default {
         //则当月的1号是从列的第三个位置开始渲染的，前面会占用-2，-1，0的位置,从1开正常渲染
         for (var j = -week + 1; j <= totalDay; j++) {
           var week_active = false;
+          var DATE_LUNAR = {};
           if (j > 0) {
+            DATE_LUNAR=getLunarDateFun(year + "-" + month + "-" + j)
             var week_day = this.getWeeks(year, month, j);
             if (week_day == 6 || week_day == 5) {
               week_active = true;
             }
           }
-          let DATE_OBJECT={
+          days.push( Object.assign(DATE_LUNAR,{
             year: year,
             month: month,
             day: j,
             date: year + "-" + month + "-" + j,
             week: week_active,
             clickactive: false,
-          }
-          days.push(Object.assign(getLunarDateFun( year + "-" + month + "-" + j),DATE_OBJECT));
+          }));
         }
         var dateItem = {
           id: year + "-" + month,
@@ -199,20 +198,7 @@ export default {
         };
         dateList.push(dateItem);
       }
-      // var sFtv = this.sFtv;
-      // for (let i = 0; i < dateList.length; i++){//加入公历节日
-      //    for(let k = 0; k < sFtv.length; k++){
-      //      if (dateList[i].month == sFtv[k].month){
-      //        let days = dateList[i].days;
-      //        for (let j = 0; j < days.length; j++){
-      //          if (days[j].day == sFtv[k].day){
-      //            days[j].daytext = sFtv[k].name
-      //          }
-      //        }
-      //      }
-      //    }
-      // }
-      console.log(dateList,'dateList')
+      console.log(dateList, "dateList");
       this.dateList = dateList;
       DATE_LIST = dateList;
     },
